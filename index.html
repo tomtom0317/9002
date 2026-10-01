@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>そすうぶんかい かんたいバトル BGM</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:rgba(0,0,0,0)}
+html,body{margin:0;padding:0;background:#dff2ff;color:#17324d;font-family:Arial,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:10px}
+.panel{background:#fff;border:2px solid #9dc7e5;border-radius:18px;padding:12px;box-shadow:0 5px 16px rgba(0,0,0,.08)}
+h1{text-align:center;font-size:26px;margin:2px 0 5px}
+.sub{text-align:center;font-size:15px;font-weight:bold;line-height:1.5}
+.status{display:table;width:100%;table-layout:fixed;border-spacing:5px;margin-top:8px}
+.sbox{display:table-cell;background:#eaf5fc;border-radius:10px;padding:7px;text-align:center;font-weight:bold;font-size:13px}
+.snum{font-size:20px;color:#175786}
+.sea{position:relative;height:330px;margin-top:10px;border-radius:18px;overflow:hidden;background:#75c6ef;border:3px solid #4f9aca}
+.sky{position:absolute;left:0;top:0;right:0;height:104px;background:#bfe9ff}
+.sun{position:absolute;right:18px;top:14px;width:50px;height:50px;border-radius:50%;background:#ffe16b}
+.cloud{position:absolute;left:25px;top:22px;font-size:40px}
+.wave1,.wave2{position:absolute;left:-5%;width:110%;height:16px;border-radius:50%;border-top:4px solid rgba(255,255,255,.7)}
+.wave1{top:225px}.wave2{top:270px}
+.shipWrap{position:absolute;left:50%;top:98px;width:320px;height:140px;margin-left:-160px}
+.ship{position:absolute;left:50%;bottom:0;width:260px;height:115px;margin-left:-130px;transform-origin:50% 100%;-webkit-transform-origin:50% 100%}
+.hull{position:absolute;left:20px;bottom:0;width:220px;height:54px;background:#536b79;border-radius:8px 8px 40px 40px;border:4px solid #31434d}
+.deck{position:absolute;left:75px;bottom:50px;width:110px;height:42px;background:#d8e0e5;border:4px solid #667986;border-bottom:0;border-radius:8px 8px 0 0}
+.turret{position:absolute;bottom:88px;width:38px;height:18px;background:#667986;border-radius:8px}
+.turret.t1{left:70px}.turret.t2{left:120px}.turret.t3{left:168px}
+.barrel{position:absolute;bottom:94px;width:52px;height:7px;background:#465964;border-radius:4px}
+.barrel.b1{left:99px}.barrel.b2{left:149px}.barrel.b3{left:197px}
+.flag{position:absolute;left:130px;bottom:105px;width:3px;height:40px;background:#465964}
+.flag:after{content:"";position:absolute;left:3px;top:0;width:30px;height:18px;background:#ffda55;border-radius:2px}
+.enemyNum{position:absolute;left:0;right:0;top:7px;text-align:center;font-size:82px;font-weight:bold;color:#14344e;text-shadow:0 3px 0 rgba(255,255,255,.7)}
+.factorLine{position:absolute;left:8px;right:8px;bottom:8px;text-align:center;background:rgba(255,255,255,.86);border-radius:12px;padding:7px;font-size:20px;font-weight:bold;min-height:40px}
+.bossLabel{display:none;position:absolute;left:50%;top:94px;margin-left:-70px;width:140px;text-align:center;background:#5e1010;color:#fff;border:3px solid #ffcf52;border-radius:12px;padding:5px;font-size:18px;font-weight:bold;z-index:5}
+.cannonArea{margin-top:10px;background:#fff6dc;border-radius:16px;padding:10px}
+.cannonTitle{text-align:center;font-size:18px;font-weight:bold;margin-bottom:8px}
+.cannons{display:table;width:100%;table-layout:fixed;border-spacing:6px}
+.ccell{display:table-cell}
+.cannon{width:100%;border:0;border-radius:14px;background:#244a66;color:#fff;padding:12px 3px;font-size:29px;font-weight:bold;box-shadow:0 4px 0 #142e42}
+.cannon:active{position:relative;top:2px;box-shadow:0 2px 0 #142e42}
+.msg{min-height:70px;margin-top:9px;background:#f7fbff;border:2px solid #d6e8f5;border-radius:14px;padding:10px;text-align:center;font-size:18px;font-weight:bold;line-height:1.45}
+.mapTitle{text-align:center;font-weight:bold;margin-top:11px}
+.map{display:table;width:100%;table-layout:fixed;border-spacing:3px}
+.mcell{display:table-cell;height:32px;border-radius:7px;background:#dce8f1;text-align:center;vertical-align:middle;font-size:11px;font-weight:bold}
+.mcell.done{background:#ffe36f}.mcell.now{background:#8fd0ff}.mcell.big{background:#ffd29a}.mcell.boss{background:#a51c1c;color:#fff}
+.actions{display:table;width:100%;table-layout:fixed;border-spacing:6px;margin-top:8px}
+.acell{display:table-cell}.small{width:100%;border:0;border-radius:10px;padding:10px;background:#8394a5;color:#fff;font-size:14px;font-weight:bold}
+#bgm.on{background:#4f8f66}
+#shell{display:none;position:fixed;z-index:80;width:46px;height:46px;border-radius:50%;background:#222;color:#fff;text-align:center;line-height:46px;font-size:22px;font-weight:bold;box-shadow:0 4px 10px rgba(0,0,0,.3)}
+.overlay{display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(220,242,255,.95);z-index:100}
+.obox{width:86%;max-width:430px;background:#fff;border-radius:20px;padding:20px;text-align:center;position:absolute;left:7%;top:18%;box-shadow:0 10px 35px rgba(0,0,0,.18)}
+.big{font-size:76px}.obox h2{font-size:28px;margin:5px}.obox p{font-size:19px;line-height:1.5;font-weight:bold}.primary{width:100%;border:0;border-radius:13px;padding:13px;background:#2d77b5;color:#fff;font-size:18px;font-weight:bold;margin-top:7px}
+#fx{position:fixed;left:0;top:0;right:0;bottom:0;pointer-events:none;z-index:90}.spark{position:absolute;width:9px;height:13px}
+@media(max-width:480px){
+ .enemyNum{font-size:70px}.sea{height:300px}.shipWrap{top:88px;-webkit-transform:scale(.88);transform:scale(.88)}
+ .cannon{font-size:25px;padding:11px 2px}.msg{font-size:16px}.wrap{padding:7px}
+}
+</style>
+</head>
+<body>
+<div id="fx"></div>
+<div id="shell"></div>
+<div class="wrap">
+<div class="panel">
+<h1>🚢 そすうぶんかい かんたいバトル</h1>
+<div class="sub">すうじの ほうだんで てきかんを こうげき！<br>レベル10・15は おおがたかん、レベル20は ラスボス！</div>
+
+<div class="status">
+ <div class="sbox">レベル<br><span id="levelNo" class="snum">1</span>/20</div>
+ <div class="sbox">スコア<br><span id="score" class="snum">0</span></div>
+ <div class="sbox">れんぞく<br><span id="combo" class="snum">0</span></div>
+ <div class="sbox">⭐<br><span id="stars" class="snum">0</span></div>
+</div>
+
+<div id="sea" class="sea">
+ <div class="sky"></div><div class="sun"></div><div class="cloud">☁️</div>
+ <div class="wave1"></div><div class="wave2"></div>
+ <div id="bossLabel" class="bossLabel">☠ ラスボス ☠</div>
+ <div class="shipWrap">
+   <div id="ship" class="ship">
+     <div id="hull" class="hull"></div>
+     <div id="deck" class="deck"></div>
+     <div class="turret t1"></div><div class="barrel b1"></div>
+     <div id="turret2" class="turret t2"></div><div id="barrel2" class="barrel b2"></div>
+     <div id="turret3" class="turret t3"></div><div id="barrel3" class="barrel b3"></div>
+     <div id="flag" class="flag"></div>
+   </div>
+ </div>
+ <div id="enemyNum" class="enemyNum">56</div>
+ <div id="factorLine" class="factorLine"></div>
+</div>
+
+<div class="cannonArea">
+ <div class="cannonTitle">👇 どの ほうだんを うつ？</div>
+ <div class="cannons">
+  <div class="ccell"><button class="cannon" data-v="2">💣 2</button></div>
+  <div class="ccell"><button class="cannon" data-v="3">💣 3</button></div>
+  <div class="ccell"><button class="cannon" data-v="5">💣 5</button></div>
+  <div class="ccell"><button class="cannon" data-v="7">💣 7</button></div>
+ </div>
+</div>
+
+<div id="msg" class="msg">てきの すうじを われる ほうだんを えらぼう！</div>
+
+<div class="mapTitle">🗺 かんたいマップ</div>
+<div id="map" class="map"></div>
+
+<div class="actions">
+ <div class="acell"><button id="retry" class="small">🔄 やりなおす</button></div>
+ <div class="acell"><button id="sound" class="small">🔊 SE ON</button></div>
+ <div class="acell"><button id="bgm" class="small">🎵 BGM OFF</button></div>
+</div>
+</div>
+</div>
+
+<div id="clear" class="overlay"><div class="obox"><div class="big">💥🚢</div><h2>げきは！</h2><p id="clearText"></p><button id="next" class="primary">つぎの てきへ</button></div></div>
+<div id="allclear" class="overlay"><div class="obox"><div class="big">🏆⚓</div><h2>ラスボス げきは！</h2><p>20レベル ぜんぶ クリア！<br>そすうぶんかい かんたいの だいしょう！</p><button id="again" class="primary">もういちど</button></div></div>
+
+<script>
+(function(){
+"use strict";
+var LEVELS=[12, 18, 20, 24, 30, 36, 40, 42, 48, 54, 56, 60, 63, 72, 75, 81, 84, 90, 96, 120], STORAGE="prime_battleship_bgm_oldipad_v2";
+var level=0,original=LEVELS[0],current=LEVELS[0],factors=[],score=0,combo=0,stars=[],soundOn=true;
+var audioCtx=null,bgmOn=false,bgmTimer=null,bgmStep=0;
+
+function $(id){return document.getElementById(id)}
+function load(){try{var s=JSON.parse(localStorage.getItem(STORAGE)||"null");if(s){if(typeof s.level==="number")level=s.level;if(s.stars)stars=s.stars;if(typeof s.score==="number")score=s.score;}}catch(e){} if(level<0||level>=LEVELS.length)level=0;}
+function save(){try{localStorage.setItem(STORAGE,JSON.stringify({level:level,stars:stars,score:score}))}catch(e){}}
+function isPrime(n){if(n<2)return false;for(var i=2;i*i<=n;i++)if(n%i===0)return false;return true;}
+function factorText(){var a=factors.slice(0);if(current>1)a.push(current);return a.join(" × ");}
+
+function renderMap(){
+ var html="",i,cl;
+ for(i=0;i<LEVELS.length;i++){
+  cl="mcell ";
+  if(stars.indexOf(i)>=0)cl+="done ";
+  if(i===level)cl+="now ";
+  if(i===9||i===14)cl+="big ";
+  if(i===19)cl+="boss ";
+  html+='<div class="'+cl+'">'+(i+1)+'</div>';
+ }
+ $("map").innerHTML=html;
+}
+
+function shipMode(){
+ var s=$("ship"),h=$("hull"),d=$("deck"),f=$("flag");
+ var t2=$("turret2"),b2=$("barrel2"),t3=$("turret3"),b3=$("barrel3");
+ $("bossLabel").style.display="none";
+ s.style.webkitTransform="scale(1)";s.style.transform="scale(1)";
+ h.style.background="#536b79";h.style.borderColor="#31434d";
+ d.style.background="#d8e0e5";f.style.display="block";
+ t2.style.display="block";b2.style.display="block";t3.style.display="none";b3.style.display="none";
+ if(level===9){
+   s.style.webkitTransform="scale(1.15)";s.style.transform="scale(1.15)";
+   h.style.background="#465f72";d.style.background="#cad6df";
+   t3.style.display="block";b3.style.display="block";
+   $("msg").innerHTML="⚓ レベル10！ おおがた じゅんようかん とうじょう！";
+ }else if(level===14){
+   s.style.webkitTransform="scale(1.28)";s.style.transform="scale(1.28)";
+   h.style.background="#3e5063";d.style.background="#bdc9d4";
+   t3.style.display="block";b3.style.display="block";
+   $("msg").innerHTML="⚓ レベル15！ さらに おおきな せんかんだ！";
+ }else if(level===19){
+   s.style.webkitTransform="scale(1.38)";s.style.transform="scale(1.38)";
+   h.style.background="#4b1f28";h.style.borderColor="#251014";d.style.background="#7a2f39";
+   t3.style.display="block";b3.style.display="block";f.style.display="none";
+   $("bossLabel").style.display="block";
+   $("msg").innerHTML="☠ レベル20！ ラスボス きょだいせんかん！";
+ }
+}
+
+function render(){
+ $("levelNo").innerHTML=String(level+1);$("score").innerHTML=String(score);$("combo").innerHTML=String(combo);$("stars").innerHTML=String(stars.length);
+ $("enemyNum").innerHTML=String(current);$("factorLine").innerHTML=factors.length?original+" = "+factorText():"";renderMap();shipMode();
+ $("bgm").innerHTML=bgmOn?"🎵 BGM ON":"🎵 BGM OFF";$("bgm").className=bgmOn?"small on":"small";
+ $("sound").innerHTML=soundOn?"🔊 SE ON":"🔇 SE OFF";
+}
+
+function startLevel(i){
+ level=i;original=LEVELS[i];current=original;factors=[];combo=0;
+ $("clear").style.display="none";render();save();
+}
+
+function getAudio(){
+ if(audioCtx)return audioCtx;
+ var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;
+ try{audioCtx=new AC();}catch(e){audioCtx=null;}
+ return audioCtx;
+}
+function unlockAudio(){
+ var a=getAudio();if(!a)return;
+ try{
+  if(a.state==="suspended"&&a.resume)a.resume();
+  var buffer=a.createBuffer(1,1,22050),src=a.createBufferSource();
+  src.buffer=buffer;src.connect(a.destination);src.start(0);
+ }catch(e){}
+}
+function tone(freq,start,dur,vol,type){
+ var a=getAudio(),o,g;if(!a)return;
+ try{
+  o=a.createOscillator();g=a.createGain();o.type=type||"sine";o.frequency.value=freq;
+  g.gain.setValueAtTime(vol,start);g.gain.exponentialRampToValueAtTime(0.0001,start+dur);
+  o.connect(g);g.connect(a.destination);o.start(start);o.stop(start+dur+0.02);
+ }catch(e){}
+}
+function playSE(freq,dur){if(!soundOn)return;var a=getAudio();if(a)tone(freq,a.currentTime+0.01,dur,.06,"square");}
+function playWin(){
+ if(!soundOn)return;var a=getAudio(),i,N=[523,659,784,1046];if(!a)return;
+ for(i=0;i<N.length;i++)tone(N[i],a.currentTime+i*.11,.2,.07,"sine");
+}
+function bgmTick(){
+ var a=getAudio(),m,b,now;if(!a||!bgmOn)return;
+ if(level===19){
+   m=[220,261.63,293.66,220,329.63,293.66,261.63,196];
+   b=[110,110,123.47,123.47];
+ }else{
+   m=[261.63,329.63,392,523.25,392,329.63,293.66,392,261.63,329.63,440,523.25,440,392,329.63,293.66];
+   b=[130.81,130.81,146.83,146.83,164.81,164.81,146.83,146.83];
+ }
+ now=a.currentTime+0.03;
+ tone(m[bgmStep%m.length],now,.22,.035,"sine");
+ if(bgmStep%2===0)tone(b[Math.floor(bgmStep/2)%b.length],now,.38,.018,"triangle");
+ bgmStep++;
+}
+function startBgm(){unlockAudio();bgmOn=true;if(bgmTimer)clearInterval(bgmTimer);bgmStep=0;bgmTick();bgmTimer=setInterval(bgmTick,280);render();}
+function stopBgm(){bgmOn=false;if(bgmTimer){clearInterval(bgmTimer);bgmTimer=null;}render();}
+function toggleBgm(){if(bgmOn)stopBgm();else startBgm();}
+
+function sparks(ok){
+ var fx=$("fx"),rect=$("enemyNum").getBoundingClientRect(),cx=rect.left+rect.width/2,cy=rect.top+rect.height/2,cols=ok?["#ffd84a","#ff7a59","#fff","#ffb347"]:["#8aa0b3","#667788","#aab7c2"],i,e;
+ for(i=0;i<30;i++){
+  e=document.createElement("div");e.className="spark";e.style.background=cols[i%cols.length];e.style.left=cx+"px";e.style.top=cy+"px";fx.appendChild(e);
+  (function(el,dx,dy,born){var tm=setInterval(function(){var t=((new Date()).getTime()-born)/650;if(t>=1){clearInterval(tm);if(el.parentNode)el.parentNode.removeChild(el);return;}el.style.left=(cx+dx*t)+"px";el.style.top=(cy+dy*t)+"px";el.style.opacity=String(1-t);},30)})(e,Math.random()*190-95,Math.random()*170-85,(new Date()).getTime());
+ }
+}
+function fireworks(n){
+ var fx=$("fx"),cols=["#f66","#fd4","#5b7","#48e","#a6e"],cx=window.innerWidth/2,cy=window.innerHeight*.25,i,e;
+ for(i=0;i<n;i++){
+  e=document.createElement("div");e.className="spark";e.style.background=cols[i%cols.length];e.style.left=cx+"px";e.style.top=cy+"px";fx.appendChild(e);
+  (function(el,dx,dy,born){var tm=setInterval(function(){var t=((new Date()).getTime()-born)/1000;if(t>=1){clearInterval(tm);if(el.parentNode)el.parentNode.removeChild(el);return;}el.style.left=(cx+dx*t)+"px";el.style.top=(cy+dy*t)+"px";el.style.opacity=String(1-t);},30)})(e,Math.random()*620-310,80+Math.random()*430,(new Date()).getTime());
+ }
+}
+
+function shoot(v){
+ unlockAudio();
+ var btns=document.getElementsByClassName("cannon"),src=null,i;
+ for(i=0;i<btns.length;i++)if(parseInt(btns[i].getAttribute("data-v"),10)===v){src=btns[i];break;}
+ var sr=src.getBoundingClientRect(),tr=$("enemyNum").getBoundingClientRect(),sx=sr.left+sr.width/2-23,sy=sr.top-5,tx=tr.left+tr.width/2-23,ty=tr.top+tr.height/2-23;
+ var sh=$("shell"),born=(new Date()).getTime(),dur=330;
+ sh.innerHTML=String(v);sh.style.left=sx+"px";sh.style.top=sy+"px";sh.style.display="block";
+ var tm=setInterval(function(){var t=((new Date()).getTime()-born)/dur;if(t>=1){clearInterval(tm);sh.style.display="none";resolveShot(v);return;}var e=t<.5?2*t*t:-1+(4-2*t)*t;sh.style.left=(sx+(tx-sx)*e)+"px";sh.style.top=(sy+(ty-sy)*e)+"px";},25);
+}
+
+function resolveShot(v){
+ if(current%v===0){
+  factors.push(v);current=current/v;combo++;score+=100+(combo-1)*25;sparks(true);playSE(720,.12);
+  $("msg").innerHTML="💥 めいちゅう！ "+(current*v)+" ÷ "+v+" = "+current+"<br>れんぞく "+combo+"！";
+  if(isPrime(current)){factors.push(current);current=1;score+=250;render();setTimeout(clearLevel,450);return;}
+ }else{
+  combo=0;score=Math.max(0,score-20);sparks(false);playSE(170,.12);
+  $("msg").innerHTML="🌊 ざんねん！ "+current+" は "+v+" では わりきれないよ。";
+ }
+ render();save();
+}
+
+function clearLevel(){
+ if(stars.indexOf(level)<0){stars.push(level);stars.sort(function(a,b){return a-b})}
+ save();render();
+ var extra=(level===9?"<br>⚓ おおがたかん げきは！":level===14?"<br>⚓ きょだいせんかん げきは！":level===19?"<br>☠ ラスボス げきは！":"");
+ $("clearText").innerHTML=original+" = "+factors.join(" × ")+extra+"<br>⭐ スタンプを 1こ ゲット！<br>スコア "+score;
+ $("clear").style.display="block";fireworks(level===19?180:100);playWin();
+}
+function nextLevel(){
+ $("clear").style.display="none";
+ if(level>=LEVELS.length-1){$("allclear").style.display="block";fireworks(220);return;}
+ startLevel(level+1);
+}
+
+var btns=document.getElementsByClassName("cannon"),i;
+for(i=0;i<btns.length;i++){(function(b){b.onclick=function(){shoot(parseInt(b.getAttribute("data-v"),10))}})(btns[i]);}
+$("retry").onclick=function(){unlockAudio();startLevel(level)};
+$("sound").onclick=function(){unlockAudio();soundOn=!soundOn;render();if(soundOn)playSE(600,.08);};
+$("bgm").onclick=function(){unlockAudio();toggleBgm();};
+$("next").onclick=nextLevel;
+$("again").onclick=function(){stars=[];score=0;$("allclear").style.display="none";startLevel(0)};
+load();startLevel(level);
+})();
+</script>
+</body></html>
